@@ -1,14 +1,16 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 
+const NODE_ENV = process.env.NODE_ENV;
+
 module.exports = {
-  mode: 'development',
+  mode: NODE_ENV || 'development',
   entry: path.resolve(__dirname, 'src/index.js'),
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  watch: true,
+  watch: NODE_ENV === 'development',
   watchOptions: {
     ignored: /node_modules/,
     poll: 1000,
@@ -25,8 +27,8 @@ module.exports = {
         use: [
           'style-loader',
           'css-loader',
-          'sass-loader'
-        ]
+          'sass-loader',
+        ],
       },
       {
         test: [/\.svg$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
@@ -36,10 +38,10 @@ module.exports = {
             options: {
               name: '[name].[ext]',
               outputPath: 'assets/',
-            }
-          }
-        ]
-      }
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [
@@ -54,4 +56,5 @@ module.exports = {
     hot: true,
     historyApiFallback: true,
   },
+  devtool: NODE_ENV === 'development' ? 'source-map' : false,
 };
